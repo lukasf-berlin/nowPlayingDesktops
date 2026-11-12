@@ -3,7 +3,10 @@
 <p align="center"><img src="docs/demo.gif" alt="Glass album-art tile updating as the track changes, then the original wallpaper restoring on pause" width="720"></p>
 
 ```bash
-pipx install now-playing-desktops && now-playing run --source local
+# Windows
+pipx install "now-playing-desktops[windows]" && now-playing run --source local
+# Linux:  pipx install "now-playing-desktops[linux]"
+# macOS:  pipx install "now-playing-desktops[macos]"
 ```
 
 [![CI](https://github.com/hippi345/nowPlayingDesktops/actions/workflows/ci.yml/badge.svg)](https://github.com/hippi345/nowPlayingDesktops/actions/workflows/ci.yml)
@@ -20,7 +23,7 @@ pipx install now-playing-desktops && now-playing run --source local
 
 ## Quick start (Windows)
 
-1. **Get the app** — download `now-playing-windows.exe` from [Releases](https://github.com/hippi345/nowPlayingDesktops/releases), or install with [pipx](https://pipx.pypa.io/): `pipx install now-playing-desktops`
+1. **Get the app** — download `now-playing-windows.exe` from [Releases](https://github.com/hippi345/nowPlayingDesktops/releases), or install with [pipx](https://pipx.pypa.io/): `pipx install "now-playing-desktops[windows]"`
 2. **Run it** — double-click the `.exe`, or run `now-playing run --source local` (pipx puts `now-playing` on your PATH)
 3. **Done** — play something in the Spotify desktop app; pause or exit to restore your wallpaper
 
@@ -47,7 +50,7 @@ Local mode reads playback from the OS media session on **this** machine. Pick yo
 **Prerequisites**
 
 - **Python 3.12+** (`requires-python` in `pyproject.toml`; CI tests 3.12 and 3.13).
-- **Install:** `pip install -e ".[windows]"` (WinRT optional deps for SMTC).
+- **Install:** `pip install "now-playing-desktops[windows]"` (WinRT optional deps for SMTC).
 - **Player:** Spotify **desktop** app playing on this PC (System Media Transport Controls).
 
 **Run**
@@ -55,7 +58,7 @@ Local mode reads playback from the OS media session on **this** machine. Pick yo
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-pip install -e ".[windows]"
+pip install "now-playing-desktops[windows]"
 now-playing run --source local
 ```
 
@@ -66,7 +69,7 @@ now-playing run --source local
 **Prerequisites**
 
 - **Python 3.12+**
-- **Install:** `pip install -e ".[linux]"` (`dbus-next` for MPRIS).
+- **Install:** `pip install "now-playing-desktops[linux]"` (`dbus-next` for MPRIS).
 - **D-Bus session:** `echo $DBUS_SESSION_BUS_ADDRESS` should be set in your desktop session.
 - **Player:** Spotify desktop or another app with **MPRIS** (`org.mpris.MediaPlayer2.*`). `playerctl` is not required by this app.
 - **Wallpaper backend** (one of): GNOME family — `gsettings`; KDE — `plasma-apply-wallpaperimage` and/or `qdbus6` / `qdbus`; XFCE — `xfconf-query` on `xfce4-desktop` backdrop keys (`xfce4-settings`); other WMs — `feh`, `swaybg`, or `nitrogen` (plus `xrandr` or `wlr-randr` for screen size).
@@ -76,7 +79,7 @@ now-playing run --source local
 ```bash
 python3.12 -m venv .venv
 source .venv/bin/activate
-pip install -e ".[linux]"
+pip install "now-playing-desktops[linux]"
 now-playing run --source local
 ```
 
@@ -85,7 +88,7 @@ now-playing run --source local
 **Prerequisites**
 
 - **Python 3.12+**
-- **Install:** `pip install -e ".[macos]"` (`appscript` for Spotify AppleScript control).
+- **Install:** `pip install "now-playing-desktops[macos]"` (`appscript` for Spotify AppleScript control).
 - **Player:** **Spotify.app** playing on this Mac.
 - **Automation:** macOS may prompt for **Automation** permission for your terminal or Python to control Spotify (System Settings → Privacy & Security → Automation).
 
@@ -94,7 +97,7 @@ now-playing run --source local
 ```bash
 python3.12 -m venv .venv
 source .venv/bin/activate
-pip install -e ".[macos]"
+pip install "now-playing-desktops[macos]"
 now-playing run --source local
 ```
 
@@ -161,7 +164,7 @@ Spotify mode uses the Web API (any device). Wallpaper setup is the same on every
 **Prerequisites**
 
 - **Python 3.12+**
-- **Install:** `pip install -e .` (base package; wallpaper uses `ctypes` / WinRT desktop APIs already in the main install path).
+- **Install:** `pip install now-playing-desktops` (base package; wallpaper uses `ctypes` / WinRT desktop APIs already in the main install path).
 - **Spotify Developer** app with **Client ID** in `.env` (see below).
 
 ### Linux (Spotify)
@@ -169,7 +172,7 @@ Spotify mode uses the Web API (any device). Wallpaper setup is the same on every
 **Prerequisites**
 
 - **Python 3.12+**
-- **Install:** `pip install -e .`
+- **Install:** `pip install now-playing-desktops`
 - **Wallpaper backend** (same as local): `gsettings` (GNOME), `plasma-apply-wallpaperimage` / `qdbus6` / `qdbus` (KDE), `xfconf-query` (XFCE), or `feh` / `swaybg` / `nitrogen` on lightweight WMs.
 
 ### macOS (Spotify)
@@ -177,7 +180,7 @@ Spotify mode uses the Web API (any device). Wallpaper setup is the same on every
 **Prerequisites**
 
 - **Python 3.12+**
-- **Install:** `pip install -e .` (wallpaper via AppKit if PyObjC is installed, otherwise `osascript`).
+- **Install:** `pip install now-playing-desktops` (wallpaper via AppKit if PyObjC is installed, otherwise `osascript`).
 
 ### 1. Create a Spotify app
 
@@ -298,7 +301,7 @@ Legacy console scripts `now-playing-macos` and `now-playing-windows` behave like
 | **Compose quality checks** | Set `NOW_PLAYING_COMPOSE_VERIFY=1` to run optional post-apply checks in a background thread (never blocks wallpaper set). |
 | **Apply timing** | Look for `Apply took X.XXs (fetch=…, compose=…, save=…, set=…, cache=hit\|miss)` in logs; background upgrades log `Upgraded art Apply took …`. |
 | **Linux unsupported platform** | Install `feh`, `swaybg`, or `nitrogen`, or use GNOME/KDE/XFCE with their wallpaper tools (`xfconf-query` on XFCE). |
-| **Local mode: no track** | Start the desktop player and press play; on Windows install `pip install -e ".[windows]"`. |
+| **Local mode: no track** | Start the desktop player and press play; on Windows install `pip install "now-playing-desktops[windows]"`. |
 | **OAuth port in use** | Change `SPOTIPY_REDIRECT_URI` and register the new URI in the Spotify dashboard. |
 
 ---
